@@ -1,0 +1,66 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath("net.ltgt.gradle:gradle-apt-plugin:0.19")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+apply plugin: "net.ltgt.apt"
+
+war {
+	baseName = 'spring-boot-war'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceSets.main.java.srcDir new File(buildDir, 'generated/source')
+idea {
+	module {
+		generatedSourceDirs += file('build/generated/source')
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+group = 'com.elab'
+version = '0.2'
+sourceCompatibility = 1.8
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile("com.auth0:java-jwt:3.4.0")
+	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.3.7.Final'
+	compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.7.Final'
+	compile group: 'javax.inject', name: 'javax.inject', version: '1'
+	compile group: 'log4j', name: 'log4j', version: '1.2.17'
+	compile group: 'joda-time', name: 'joda-time', version: '2.10'
+	compile group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.7.0'
+	compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
+	compile group: 'org.hibernate', name: 'hibernate-envers', version: '5.3.7.Final'
+	compile group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '9.0.12'
+	compile group: 'com.lowagie', name: 'itext', version: '2.1.7'
+	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+	compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
+	apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+	runtime('org.springframework.boot:spring-boot-devtools')
+	runtime('com.h2database:h2')
+	runtime('mysql:mysql-connector-java')
+}
